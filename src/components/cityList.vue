@@ -5,6 +5,7 @@ import { useWeatherStore } from "@/stores/weatherStore";
 // Access the weather store
 const { weatherData, getCityID, fetchWeatherData } = useWeatherStore();
 const { filteredWeatherData } = useWeatherStore();
+// const currentTime = ref(null)
 
 // Fetch city IDs and weather data on component mount
 onMounted(async () => {
@@ -19,32 +20,42 @@ const list = computed(() => {
     location: data.name || "Unknown Location",
     city: data.sys.country || "Unknown Country",
     status: data.weather[0]?.description || "No Status",
-    temperature: (data.main.temp - 273.15).toFixed(1), // Convert to Celsius
-    highTemp: (data.main.temp_max - 273.15).toFixed(1), // Convert to Celsius
-    lowTemp: (data.main.temp_min - 273.15).toFixed(1), // Convert to Celsius
+    temperature: (data.main.temp - 273.15).toFixed(1), 
+    highTemp: (data.main.temp_max - 273.15).toFixed(1), 
+    lowTemp: (data.main.temp_min - 273.15).toFixed(1), 
     currentTime: new Date(data.dt * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    hour: new Date(data.dt * 1000).getHours(), 
   }));
 });
 
+const getImageBg = (hour) => {
+  if (hour >= 6 && hour < 18) {
+    return "src/assets/img/day.png"; // Daytime color
+  }
+  return "src/assets/img/night.png"; // Nighttime color
+};
 </script>
 
 <template>
   <v-container>
-    <v-card v-for="(item, index) in list" :key="index" class="mb-5">
+    <!-- :color="getCardColor(item.hour)" -->
+    <v-card v-for="(item, index) in list" :key="index" 
+      :image="getImageBg(item.hour)"
+      class="mb-5 city-card">
       <router-link :to="`/details/${item.id}`" style="text-decoration: none; color: inherit;">
       <v-card-item>
         <v-row align="center" no-gutters>
-          <v-col cols="8">
-            <v-card-title>{{ item.location }}</v-card-title>
+          <v-col cols="7">
+            <v-card-title class="city-card-title">{{ item.location }}</v-card-title>
             <v-card-subtitle>{{ item.city }} {{ item.currentTime }}</v-card-subtitle>
           </v-col>
-          <v-col class="text-h4 text-end" cols="4">
+          <v-col class="text-h3 text-end" cols="5">
             {{ item.temperature }}&deg;
           </v-col>
         </v-row>
       </v-card-item>
 
-      <v-card-text>
+      <v-card-text class="mt-4">
         <v-row align="center" dense>
           <v-col cols="6" class="status">
             {{ item.status }}
@@ -62,8 +73,17 @@ const list = computed(() => {
   </v-container>
 </template>
 
-<style>
+<style lang="scss">
 .status {
   text-transform: capitalize;
+}
+.city-card{
+  border-radius: 20px !important;
+  box-shadow: none !important;
+  color: white !important;
+
+  .city-card-title{
+    font-weight: 800;
+  }
 }
 </style>

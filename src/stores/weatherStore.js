@@ -78,7 +78,7 @@ const fetchForecastData = async (id = null) => {
 };
 
 const filteredWeatherData = computed(() => {
-  const query = searchQuery.value.toLowerCase();
+  const query = searchQuery.value?.toLowerCase() || '';
   return weatherData.value.filter((data) =>
     data.name.toLowerCase().includes(query)
   );

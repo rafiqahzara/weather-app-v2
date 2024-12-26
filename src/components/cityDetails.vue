@@ -96,53 +96,63 @@ const weeklyForecast = computed(() => {
 
 </script>
 
-
 <template>
-  <v-container v-if="todayWeather">
-     <v-btn @click="goBack" color="primary" outlined>
-      Back
-    </v-btn>
-    <v-card
-    class="text-center"
-    color="blue-darken-2">
+  <v-container v-if="todayWeather" class="city-details">
+    <div class="city-banner">
+    <v-card variant="text" class="text-center">
       <v-card-item>
-        <v-card-title>{{ todayWeather.location }}, {{ todayWeather.city }}</v-card-title>
+        <v-row align="center" class="mb-3">
+          <v-col cols="2">
+            <v-btn icon="mdi mdi-chevron-left" variant="plain" @click="goBack"></v-btn>
+          </v-col>
+          <v-col cols="8">
+            <v-card-title>{{ todayWeather.location }}, {{ todayWeather.city }}</v-card-title>
+          </v-col>
+        </v-row>
         <v-card-subtitle>{{ todayWeather.date }}</v-card-subtitle>
       </v-card-item>
-      <v-card-text class="weather-info">
-        <img :src="`http://openweathermap.org/img/wn/${todayWeather.icon}@2x.png`" alt="Weather Icon" />
-        <div class="temperature">{{ todayWeather.temperature }}</div>
-        <div class="description">{{ todayWeather.description }}</div>
+      <v-card-text class="weather-info text-center">
+        <v-img
+          :width="100"
+          aspect-ratio="1/1"
+          cover
+          class="mx-auto"
+          :src="`http://openweathermap.org/img/wn/${todayWeather.icon}@2x.png`" alt="Weather Icon" ></v-img>
+        <div class="temperature text-h6">{{ todayWeather.temperature }}</div>
+        <div class="description text-h5">{{ todayWeather.description }}</div>
       </v-card-text>
     </v-card>
+    </div>
 
-    <h2 class="my-5"> Hourly Forecast</h2>
-     <v-row class="hourly-forecast">
+    <h2 class="my-5 mx-5 text-h5"> Hourly Forecast</h2>
+     <v-row class="hourly-forecast mx-3">
       <v-col
         v-for="(hour, index) in hourlyForecast"
         :key="index"
         cols="4"
         md="4"
         class="text-center">
-        <v-card class="hour-card" outlined>
+        <v-card class="hour-card" variant="text">
             <v-card-title>
                 <v-img
+                    :width="100"
                     aspect-ratio="1/1"
-                    contain
+                    cover
+                    class="mx-auto"
                     :src="`http://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`"
                     alt="Weather Icon"
                 ></v-img>
             </v-card-title>
             <v-card-text>
-                <h3>{{ `${Math.round(hour.main.temp - 273.15)}°C` }}</h3>
+                <h3>{{ `${Math.round(hour.main.temp - 273.15)}°` }}</h3>
                 <p>{{ new Date(hour.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</p>
             </v-card-text>
         </v-card>
       </v-col>
     </v-row>
 
-    <h2 class="my-5">Weekly Forecast</h2>
-    <v-row>
+    <h2 class="my-5 mx-5 text-h5">Weekly Forecast</h2>
+    <v-row class="weekly-forecast mx-3">
       <v-col
         v-for="(day, index) in weeklyForecast"
         :key="index"
@@ -150,26 +160,28 @@ const weeklyForecast = computed(() => {
         md="6"
         lg="4"
       >
-        <v-card class="weekly-card" outlined>
+        <v-card class="weekly-card" variant="text">
           <v-card-item>
-            <v-row>
+            <v-row align="center">
                 <v-col cols="3">
                     <v-img
+                    :width="100"
                     aspect-ratio="1/1"
-                    contain
-                     :src="`http://openweathermap.org/img/wn/${day.icon}@2x.png`"
+                    cover
+                    class="mx-auto"
+                    :src="`http://openweathermap.org/img/wn/${day.icon}@2x.png`"
                     alt="Weather Icon"
                 ></v-img>
                 </v-col>
                 <v-col cols="6">
-                    <h3 class="day">{{ day.day }}</h3>
-                    <p class="description">
+                    <h3>{{ day.day }}</h3>
+                    <p>
                         <small> {{ day.date }} </small><br>
                         {{ day.main }}
                     </p>
                 </v-col>
                 <v-col cols="3">
-                    <h4 class="temperature">{{ day.temperature }}</h4>
+                    <h3>{{ day.temperature }}</h3>
                 </v-col>
             </v-row>
           </v-card-item>
@@ -184,11 +196,21 @@ const weeklyForecast = computed(() => {
 /* #app {
     padding: 0 !important;
 } */
-.v-container{
-    padding: 0 !important;
-}
-.description{
-    text-transform: capitalize;
+.city-details{
+   padding: 0px !important;
+
+  .city-banner{
+    background-image: linear-gradient(to bottom right, #4F80FA, #3764D7, #335FD1);
+    color: white;
+    padding: 20px 0;
+  }
+  .weather-info{
+    .description{
+      &.text-h5{
+        text-transform: capitalize !important;
+      }
+  }
+  }
 }
 .hourly-forecast{
     -ms-overflow-style: none;  
@@ -199,15 +221,40 @@ const weeklyForecast = computed(() => {
     &::-webkit-scrollbar { 
         display: none; 
     }
-}
-.hour-card{
-
-    .v-card-title{
+    .hour-card{
+      border:1px solid #E0E0E0;
+      border-radius: 10px;
+      .v-card-title{
         padding: 0 !important;
-    }
-    .v-card-text{
+      }
+      .v-card-text{
         padding: 0 0 10px 0 !important;
+        h3{
+          font-weight: 700;
+        }
+        p{
+          font-weight: 300;
+        }
+      }
     }
+}
+.weekly-forecast{
+  .weekly-card{
+    background-color: #D2DFFF;
+    border-radius: 12px;
+    .v-img{
+      background-color: #9AB6FF;
+      border-radius: 100px;
+    }
+    .v-card-item{
+      h3{
+        font-weight: 700;
+      }
+      p, small{
+        font-weight: 300;
+      }
+    }
+  }
 }
 
 </style>
