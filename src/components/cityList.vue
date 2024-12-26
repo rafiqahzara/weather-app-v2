@@ -15,17 +15,21 @@ onMounted(async () => {
 
 // Process weather data to fit the desired structure
 const list = computed(() => {
-  return filteredWeatherData.value.map((data) => ({
-    id: data.id || "Unknown ID",
-    location: data.name || "Unknown Location",
-    city: data.sys.country || "Unknown Country",
-    status: data.weather[0]?.description || "No Status",
-    temperature: (data.main.temp - 273.15).toFixed(1), 
-    highTemp: (data.main.temp_max - 273.15).toFixed(1), 
-    lowTemp: (data.main.temp_min - 273.15).toFixed(1), 
-    currentTime: new Date(data.dt * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    hour: new Date(data.dt * 1000).getHours(), 
-  }));
+  return filteredWeatherData.value.map((data) => {
+    const localTimestamp = (data.dt + data.timezone) * 1000; // Adjust for timezone
+    const localTime = new Date(localTimestamp);
+    return {
+      id: data.id || "Unknown ID",
+      location: data.name || "Unknown Location",
+      city: data.sys.country || "Unknown Country",
+      status: data.weather[0]?.description || "No Status",
+      temperature: (data.main.temp - 273.15).toFixed(1),
+      highTemp: (data.main.temp_max - 273.15).toFixed(1),
+      lowTemp: (data.main.temp_min - 273.15).toFixed(1),
+      currentTime: localTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      hour: localTime.getHours(), // Extract the hour for background
+    };
+  });
 });
 
 const getImageBg = (hour) => {

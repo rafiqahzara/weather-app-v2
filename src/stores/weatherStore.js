@@ -11,6 +11,8 @@ const cities = [
   "Kuala Lumpur,Malaysia", 
   "London,uk", 
   "Seongnam-si,Korea", 
+  "Texas,us",
+  "Tokyo,jpn",
   "Milan,italy",
   "Singapore,singapore"];
 const cityIDs = ref([]);
