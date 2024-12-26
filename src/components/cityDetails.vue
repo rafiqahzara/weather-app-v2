@@ -1,12 +1,13 @@
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useWeatherStore } from "@/stores/weatherStore";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
 const cityId = route.params.id;
-const { forecastData, fetchForecastData } = useWeatherStore();
+const time = ref(null)
+const { weatherData, forecastData, fetchWeatherData, fetchForecastData } = useWeatherStore();
 
 const goBack = () => {
   router.back();
@@ -24,11 +25,22 @@ const getTodayDate = () => {
 const todayDate = getTodayDate();
 
 onMounted(async () => {
+  await fetchWeatherData();
   await fetchForecastData(cityId);
 });
 
+
 // Extract today's weather data
 const todayWeather = computed(() => {
+
+  // get time from city list, compare by same id
+  weatherData.value.map((weather) => {
+    if(cityId == weather.id){
+      time.value = new Date((weather.dt + weather.timezone) * 1000)
+      .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    }
+  })
+
   if (!forecastData.value.length) return null;
 
   const data = forecastData.value[0]; 
@@ -120,6 +132,7 @@ const weeklyForecast = computed(() => {
           :src="`http://openweathermap.org/img/wn/${todayWeather.icon}@2x.png`" alt="Weather Icon" ></v-img>
         <div class="temperature text-h6">{{ todayWeather.temperature }}</div>
         <div class="description text-h5">{{ todayWeather.description }}</div>
+        <p class="mt-5"> {{time}} </p>
       </v-card-text>
     </v-card>
     </div>
