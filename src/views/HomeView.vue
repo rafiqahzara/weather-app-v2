@@ -4,9 +4,8 @@ import searchLocation from '../components/searchLocation.vue'
 </script>
 
 <template>
-<cityList />
   <main>
-    <!-- <searchLocation /> -->
-    <!-- <cityList /> -->
+    <searchLocation />
+    <cityList />
   </main>
 </template>

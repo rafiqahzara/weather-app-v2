@@ -4,6 +4,7 @@ import { useWeatherStore } from "@/stores/weatherStore";
 
 // Access the weather store
 const { weatherData, getCityID, fetchWeatherData } = useWeatherStore();
+const { filteredWeatherData } = useWeatherStore();
 
 // Fetch city IDs and weather data on component mount
 onMounted(async () => {
@@ -13,7 +14,7 @@ onMounted(async () => {
 
 // Process weather data to fit the desired structure
 const list = computed(() => {
-  return weatherData.value.map((data) => ({
+  return filteredWeatherData.value.map((data) => ({
     id: data.id || "Unknown ID",
     location: data.name || "Unknown Location",
     city: data.sys.country || "Unknown Country",

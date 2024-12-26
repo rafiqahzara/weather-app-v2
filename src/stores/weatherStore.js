@@ -1,13 +1,21 @@
-import { ref, toRaw } from 'vue';
+import { ref, computed } from 'vue';
 import axios from 'axios';
+import { defineStore } from "pinia";
 
 const weatherData = ref([]);
 const forecastData = ref([]);
 const error = ref(null);
 const APPID = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const baseURL = 'http://api.openweathermap.org/data/2.5/';
-const cities = ["Kuala Lumpur,Malaysia", "London,uk", "Seongnam-si,Korea", "Milan,italy"];
+const cities = [
+  "Kuala Lumpur,Malaysia", 
+  "London,uk", 
+  "Seongnam-si,Korea", 
+  "Milan,italy",
+  "Singapore,singapore"];
 const cityIDs = ref([]);
+const searchQuery = ref(""); // Add search query state
+
 
 const getCityID = async () => {
   try {
@@ -69,9 +77,18 @@ const fetchForecastData = async (id = null) => {
   }
 };
 
+const filteredWeatherData = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+  return weatherData.value.filter((data) =>
+    data.name.toLowerCase().includes(query)
+  );
+});
+
 export const useWeatherStore = () => ({
   weatherData,
   forecastData,
+  filteredWeatherData,
+  searchQuery,
   error,
   getCityID,
   fetchWeatherData,

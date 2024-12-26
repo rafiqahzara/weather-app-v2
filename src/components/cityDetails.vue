@@ -1,11 +1,16 @@
 <script setup>
 import { computed, onMounted } from "vue";
 import { useWeatherStore } from "@/stores/weatherStore";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const cityId = route.params.id;
 const { forecastData, fetchForecastData } = useWeatherStore();
+
+const goBack = () => {
+  router.back();
+};
 
 // Function to get today's date in YYYY-MM-DD format
 const getTodayDate = () => {
@@ -94,6 +99,9 @@ const weeklyForecast = computed(() => {
 
 <template>
   <v-container v-if="todayWeather">
+     <v-btn @click="goBack" color="primary" outlined>
+      Back
+    </v-btn>
     <v-card
     class="text-center"
     color="blue-darken-2">
