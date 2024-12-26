@@ -152,7 +152,7 @@ const weeklyForecast = computed(() => {
     </v-row>
 
     <h2 class="my-5 mx-5 text-h5">Weekly Forecast</h2>
-    <v-row class="weekly-forecast mx-3">
+    <v-row class="weekly-forecast mx-3 mb-5">
       <v-col
         v-for="(day, index) in weeklyForecast"
         :key="index"
