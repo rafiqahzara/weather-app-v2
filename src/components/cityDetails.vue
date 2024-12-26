@@ -7,7 +7,7 @@ const route = useRoute();
 const router = useRouter();
 const cityId = route.params.id;
 const time = ref(null)
-const { weatherData, forecastData, fetchWeatherData, fetchForecastData } = useWeatherStore();
+const { weatherData, getCityID, forecastData, fetchWeatherData, fetchForecastData } = useWeatherStore();
 
 const goBack = () => {
   router.back();
@@ -25,6 +25,7 @@ const getTodayDate = () => {
 const todayDate = getTodayDate();
 
 onMounted(async () => {
+  await getCityID();
   await fetchWeatherData();
   await fetchForecastData(cityId);
 });
