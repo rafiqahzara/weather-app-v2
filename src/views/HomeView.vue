@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import cityList from '../components/cityList.vue'
+import searchLocation from '../components/searchLocation.vue'
 </script>
 
 <template>
+<cityList />
   <main>
-    <TheWelcome />
+    <!-- <searchLocation /> -->
+    <!-- <cityList /> -->
   </main>
 </template>
