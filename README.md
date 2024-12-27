@@ -22,10 +22,13 @@ npm install
 
 ## .env Setup [IMPORTANT]
 
-Create .env file in the root of the repository and add OpenWeatherMap API key under following format:
+* To setup .env file first before run the application
+* Create .env file in the root of the repository and add OpenWeatherMap API key under following format:
+
 ```sh
 VITE_OPENWEATHER_API_KEY=your_api_key
 ```
+* This is to prevent token exposure on GitHub
 
 ### Compile and Hot-Reload for Development
 
